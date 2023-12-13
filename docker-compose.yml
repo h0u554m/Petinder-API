@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: express-api:latest
+    container_name: express-api-container
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: "production"
+    restart: unless-stopped
