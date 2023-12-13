@@ -1,0 +1,30 @@
+# Dependency directories
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# yarn
+yarn-error.log
+
+# dotenv environment file
+.env
+
+# VS Code configuration
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# npm configuration
+npm-debug.log
