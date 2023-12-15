@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body
+    style="
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100vh;
+    "
+  >
+    <form
+      action="/reset-password/:id/:token"
+      method="POST"
+      style="display: grid; width: 300px"
+      id="resetPasswordForm"
+    >
+      <h1 style="font-size: 20px; margin: 0px">User email:</h1>
+      <h1 style="font-size: 20px; margin-bottom: 50px"><%= email%></h1>
+      <h1 style="display: none; margin-bottom: 50px"><%= id%></h1>
+      <h1 style="display: none; margin-bottom: 50px"><%= token%></h1>
+
+      <label style="margin-bottom: 5px">New Password:</label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="password"
+        style="margin-bottom: 25px; height: 25px; padding: 5px 10px"
+      />
+
+      <label style="margin-bottom: 5px">Confirm new Password:</label>
+      <input
+        type="password"
+        name="confirmPassword"
+        id="confirmPassword"
+        placeholder="confirm password"
+        style="margin-bottom: 25px; height: 25px; padding: 5px 10px"
+      />
+
+      <input type="submit" value="Submit" style="cursor: pointer" />
+
+      <h1 style="font-size: 16px; display: none; color: red" id="response-one">
+        Error: password and confirm password are not the same
+      </h1>
+
+      <h1 style="font-size: 16px; display: none; color: red" id="response-two">
+        Error: complete all fields
+      </h1>
+
+      <h1
+        style="font-size: 16px; display: none; color: red"
+        id="response-three"
+      >
+        Error: The password must be at least 8 characters and include numbers,
+        letters, uppercase and lowercase letters.
+      </h1>
+    </form>
+
+    <script>
+      document
+        .getElementById("resetPasswordForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault(); // Evita el comportamiento predeterminado del formulario
+
+          const idElement = document.querySelector("h1:nth-child(3)");
+          const idValue = idElement.textContent.trim();
+
+          const tokenElement = document.querySelector("h1:nth-child(4)");
+          const tokenValue = tokenElement.textContent.trim();
+
+          var number = Number(idValue);
+
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          console.log(password);
+          console.log(confirmPassword);
+
+          try {
+            const response = await fetch(
+              `/api/reset-password/${number}/${tokenValue}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  password: password,
+                  confirmPassword: confirmPassword,
+                }),
+              }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              console.log(result);
+              if (result === "Complete all fields") {
+                let h1ResponseTwo = document.getElementById("response-two");
+                h1ResponseTwo.style.display = "flex";
+                let h1ResponseOne = document.getElementById("response-one");
+                h1ResponseOne.style.display = "none";
+                let h1ResponseThree = document.getElementById("response-three");
+                h1ResponseThree.style.display = "none";
+              } else if (
+                result === "Password and confirmPassword are not the same"
+              ) {
+                let h1ResponseOne = document.getElementById("response-one");
+                h1ResponseOne.style.display = "flex";
+                let h1ResponseTwo = document.getElementById("response-two");
+                h1ResponseTwo.style.display = "none";
+                let h1ResponseThree = document.getElementById("response-three");
+                h1ResponseThree.style.display = "none";
+              } else if (
+                password.length < 8 ||
+                !password.match(/[A-Z]/) || // al menos una mayúscula
+                !password.match(/[a-z]/) || // al menos una minúscula
+                !password.match(/[0-9]/) || // al menos un número
+                !password.match(/[a-zA-Z0-9]/) // al menos una letra (puede ser cualquier carácter alfanumérico)
+              ) {
+                let h1ResponseThree = document.getElementById("response-three");
+                h1ResponseThree.style.display = "flex";
+                let h1ResponseTwo = document.getElementById("response-two");
+                h1ResponseTwo.style.display = "none";
+                let h1ResponseOne = document.getElementById("response-one");
+                h1ResponseOne.style.display = "none";
+              } else {
+                Swal.fire({
+                  title: "Success",
+                  text: "Password reset successfully!",
+                  icon: "success",
+                }).then(() => {
+                  window.location.href = "https://petinder.com/";
+                });
+              }
+            } else {
+              console.error(result);
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
