@@ -20,12 +20,12 @@ jobs:
         uses: adrielcodeco/docker-compose-run-action@v1
         with:
           compose-file: "docker-compose.yml"
-          service: app
+          service: services
           run: build
 
       - name: Push Docker Compose images
         uses: adrielcodeco/docker-compose-run-action@v1
         with:
           compose-file: "docker-compose.yml"
-          service: app
+          service: services
           run: push
