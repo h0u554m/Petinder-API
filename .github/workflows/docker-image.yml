@@ -15,4 +15,4 @@ jobs:
       - uses: adrielcodeco/docker-compose-run-action@v1
         with:
           compose-file: "./docker-compose.yml"
-          service: my-service
+          service: app
