@@ -10,9 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # need checkout before using compose-action
-      - uses: actions/checkout@v3
-      - uses: adrielcodeco/docker-compose-run-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push Docker Compose
+        uses: adrielcodeco/docker-compose-run-action@v1
         with:
-          compose-file: "./docker-compose.yml"
+          compose-file: "docker-compose.yml"
           service: app
+          run: build
+
+      - name: Push Docker Compose images
+        uses: adrielcodeco/docker-compose-run-action@v1
+        with:
+          compose-file: "docker-compose.yml"
+          service: app
+          run: push
