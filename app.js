@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const path = require("path");
 const resetPasswordRoute = require("./routes/resetPasswordRoute.js");
+const resetEmailRoute = require("./routes/reseteEmailRoute.js");
 
 // Create Express App
 const app = express();
@@ -26,7 +27,8 @@ app.use('/users', userRoute); */
 // route Felipe Blaksley Reset Password
 app.set("view engine", "ejs");
 app.use("/api", resetPasswordRoute);
-// ------------------------------------------------------------ 
+app.use("/api", resetEmailRoute);
+// ------------------------------------------------------------
 
 // Handle 404 errors
 app.use((req, res, next) => {
