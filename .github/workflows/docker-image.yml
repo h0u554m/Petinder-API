@@ -20,6 +20,6 @@ jobs:
         run: |
           docker-compose build
           docker-compose push
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+        env:
+          DOCKER_USERNAME: ${{ github.actor }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}}
