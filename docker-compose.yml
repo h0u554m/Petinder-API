@@ -9,7 +9,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: express-api:latest
-    command: /usr/local/bin/docker-entrypoint.sh
     container_name: express-api-container
     ports:
       - '3000:3000'

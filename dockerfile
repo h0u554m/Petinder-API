@@ -15,7 +15,6 @@ COPY . .
 
 # Give execute permissions to the entrypoint script directly
 
-
 # Expose the port your app runs on
 EXPOSE 3000
 
