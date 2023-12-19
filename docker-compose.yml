@@ -9,6 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: express-api:latest
+    command: /usr/local/bin/docker-entrypoint.sh
     container_name: express-api-container
     ports:
       - '3000:3000'
@@ -22,7 +23,7 @@ services:
     image: postgres:latest
     container_name: postgres-container
     environment:
-      POSTGRES_PASSWORD: password # we have to setup password here
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
