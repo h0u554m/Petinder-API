@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Give execute permissions to the entrypoint script directly
-RUN bash -c 'chmod +x docker-entrypoint.sh'
+RUN ash  -c 'chmod +x docker-entrypoint.sh'
 
 # Expose the port your app runs on
 EXPOSE 3000
