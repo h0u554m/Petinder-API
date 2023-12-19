@@ -13,6 +13,8 @@ RUN npm install
 # Copy the local source files to the container
 COPY . .
 
+RUN chmod +x docker-entrypoint.sh
+
 # Expose the port your app runs on
 EXPOSE 3000
 
