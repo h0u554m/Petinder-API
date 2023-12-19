@@ -29,6 +29,14 @@ app.use((req, res, next) => {
   next(err);
 });
 
+
+app.get("/",(req, res,)=>{
+  res.json({
+    Api: {
+      message: "Petinder API Online",
+    },
+  });
+})
 // Error handler
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
