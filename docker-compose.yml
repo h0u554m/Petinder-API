@@ -1,5 +1,9 @@
 version: '3'
 services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
   app:
     build:
       context: .
@@ -18,7 +22,7 @@ services:
     image: postgres:latest
     container_name: postgres-container
     environment:
-      POSTGRES_PASSWORD: password # we have to setup password here
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
