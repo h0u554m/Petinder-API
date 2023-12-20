@@ -43,7 +43,7 @@ const login = async (req, res, next) => {
 
     if (passwordMatch) {
       // Passwords match, generate a JWT token
-      const { accessToken, refreshToken } = generateTokens(newUser);
+      const { accessToken, refreshToken } = generateTokens(user);
 
       // Send the token in the response
       res.json({ accessToken, refreshToken });
@@ -99,7 +99,7 @@ const register = async (req, res, next) => {
     });
 
     // Generate a JWT token
-    const { accessToken, refreshToken } = generateTokens(user);
+    const { accessToken, refreshToken } = generateTokens(newUser);
 
     // Send the tokens in the response
     res.json({ accessToken, refreshToken });
