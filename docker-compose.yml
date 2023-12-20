@@ -10,7 +10,7 @@ services:
       - '3000:3000'
     environment:
       NODE_ENV: 'production'
-      DATABASE_URL: 'postgresql://postgres:123456@Petinder_db:5432/postgres'
+      DATABASE_URL: 'postgresql://postgres:123456@petinder_db:5432/postgres'
     restart: unless-stopped
     depends_on:
       - db
