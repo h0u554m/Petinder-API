@@ -16,18 +16,9 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Set up your routes
-/* const indexRoute = require('./routes/index');
-const userRoute = require('./routes/user');
+const indexRoute = require("./routes/index");
 
-app.use('/', indexRoute);
-app.use('/users', userRoute); */
-
-/* // Handle 404 errors
-app.use((req, res, next) => {
-  const err = new Error("Not Found");
-  err.status = 404;
-  next(err);
-}); */
+app.use("/", indexRoute);
 
 app.get("/", (req, res) => {
   res.json({
@@ -36,17 +27,7 @@ app.get("/", (req, res) => {
     },
   });
 });
-/* 
-// Error handler
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    error: {
-      message: err.message,
-    },
-  });
-});
- */
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
