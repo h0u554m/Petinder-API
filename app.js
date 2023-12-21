@@ -22,7 +22,7 @@ const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Library API",
+            title: "Petinder API",
             version: "1.0.0",
             description: "Petinder Online API",
         },
@@ -30,7 +30,7 @@ const options = {
         servers: [
             {
                 url: "http://localhost:3000",
-                description: "Pettinder API Documentation",
+                description: "Petinder API Documentation",
             },
         ],
     },
