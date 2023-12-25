@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const BlogPost = require("./BlogPostModel"); // Import the User model
 
 const User = sequelize.define("user", {
   ID: {
@@ -11,6 +12,10 @@ const User = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true, // Ensure usernames are unique
+  },
+  role: {
+    type: DataTypes.STRING,
+    defaultValue: "user",
   },
   password: {
     type: DataTypes.STRING,
@@ -54,7 +59,7 @@ const User = sequelize.define("user", {
   address: { type: DataTypes.STRING, allowNull: false },
 });
 
-User.sync() // Use { force: true } to drop the table if it already exists
+User.sync({ force: true }) // Use { force: true } to drop the table if it already exists
   .then(() => {
     console.log("User table created successfully");
   })

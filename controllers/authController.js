@@ -1,4 +1,3 @@
-// authController.js
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
@@ -7,12 +6,12 @@ const UserModel = require("../models/UserModel"); // Assuming your Sequelize mod
 const generateTokens = (user) => {
   const secretKey = "Petinder";
   const accessTokenPayload = {
-    userId: user.id,
+    userId: user.ID,
     username: user.name,
     // Add other relevant information
   };
   const refreshTokenPayload = {
-    userId: user.id,
+    userId: user.ID,
   };
 
   const accessToken = jwt.sign(accessTokenPayload, secretKey, {
