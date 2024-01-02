@@ -3,7 +3,7 @@
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("petinder_db", "postgres", "123456", {
-  host: "postgres-container",
+  host: "localhost", // postgres-container
   dialect:
     "postgres" /* one of 'mysql' | '' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
   define: {

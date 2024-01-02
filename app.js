@@ -2,10 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const path = require("path");
+const cors = require("cors");
 
 // Create Express App
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(cors());
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const BlogPost = require("./BlogPostModel"); // Import the User model
 
 const User = sequelize.define("user", {
   ID: {
@@ -9,8 +10,11 @@ const User = sequelize.define("user", {
   },
   username: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true, // Ensure usernames are unique
+    allowNull: true,
+  },
+  role: {
+    type: DataTypes.STRING,
+    defaultValue: "user",
   },
   password: {
     type: DataTypes.STRING,
@@ -26,11 +30,11 @@ const User = sequelize.define("user", {
   },
   Country: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   latest_tracked_location: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
     get() {
       return JSON.parse(this.getDataValue("latest_tracked_location"));
     },
@@ -38,12 +42,12 @@ const User = sequelize.define("user", {
       this.setDataValue("latest_tracked_location", JSON.stringify(val));
     },
   },
-  logbook: { type: DataTypes.STRING },
-  name: { type: DataTypes.STRING, allowNull: false },
-  profile_picture: { type: DataTypes.STRING, allowNull: false },
+  logbook: { type: DataTypes.STRING, allowNull: true },
+  name: { type: DataTypes.STRING, allowNull: true },
+  profile_picture: { type: DataTypes.STRING, allowNull: true },
   pets: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     get() {
       return this.getDataValue("pets").split(";");
     },
@@ -51,10 +55,10 @@ const User = sequelize.define("user", {
       this.setDataValue("pets", val.join(";"));
     },
   },
-  address: { type: DataTypes.STRING, allowNull: false },
+  address: { type: DataTypes.STRING, allowNull: true },
 });
 
-User.sync() // Use { force: true } to drop the table if it already exists
+User.sync({ force: true }) // Use { force: true } to drop the table if it already exists
   .then(() => {
     console.log("User table created successfully");
   })
