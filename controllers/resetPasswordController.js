@@ -1,11 +1,8 @@
 const jwt = require("jsonwebtoken");
 var nodemailer = require("nodemailer");
 var JWT_SECRET = "heUmO87Kh1KK";
-var user = {
-  id: 1,
-  email: "felipe.blaksley@hotmail.com",
-  password: "12345678",
-};
+const UserModel = require("../models/UserModel");
+const { PASSNODEMAILER } = require("../config");
 
 const postResetPassword = async (req, res) => {
   try {
@@ -16,7 +13,10 @@ const postResetPassword = async (req, res) => {
       res.status(404).send("Send user email");
     } else {
       // find user by email if user not exist send message if not send email to reset password
-      if (email !== user.email) {
+      const user = await UserModel.findOne({
+        where: { email: email },
+      });
+      if (!user) {
         res.status(404).send("User does not exists");
       } else {
         const secret = `${JWT_SECRET} ${user.password}`;
@@ -29,7 +29,7 @@ const postResetPassword = async (req, res) => {
           service: "gmail",
           auth: {
             user: "pipe.blaksley@gmail.com",
-            pass: "jbbj bncp ynxb kgvs",
+            pass: PASSNODEMAILER,
           },
           tls: {
             rejectUnauthorized: false,
@@ -66,8 +66,11 @@ const getResetPassword = async (req, res) => {
     const { id, token } = req.params;
     var number = Number(id);
     //Verified that user exist
+    const user = await UserModel.findOne({
+      where: { id: number },
+    });
 
-    if (number !== user.id) {
+    if (!user) {
       res.status(404).send("User does not exists");
     } else {
       const secret = `${JWT_SECRET} ${user.password}`;
@@ -83,26 +86,39 @@ const postResetPasswordEmail = async (req, res) => {
   try {
     const { id, token } = req.params;
     const { password, confirmPassword } = req.body;
-    //Verified that password and confirmPassword are the same
-    if (password === "" || confirmPassword === "") {
-      res.json("Complete all fields");
-    } else if (password !== confirmPassword) {
-      res.json("Password and confirmPassword are not the same");
-    } else {
-      var number = Number(id);
-      //Verified that user exist
 
-      if (number !== user.id) {
-        res.status(404).send("User does not exists");
-      } else {
-        // take the new password an save it in the database
-        const secret = `${JWT_SECRET} ${user.password}`;
-        const verify = jwt.verify(token, secret);
-        res.json("Verified");
-      }
+    if (!password || !confirmPassword) {
+      return res.status(400).json("Complete all fields");
     }
+
+    if (password !== confirmPassword) {
+      return res
+        .status(400)
+        .json("Password and confirmPassword are not the same");
+    }
+
+    const userId = Number(id);
+    const user = await UserModel.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json("User does not exist");
+    }
+
+    const decodedToken = jwt.verify(token, JWT_SECRET);
+
+    // Check token validity
+    if (decodedToken.userId !== userId) {
+      return res.status(401).json("Unauthorized token");
+    }
+
+    // Update password (consider hashing/encrypting before saving)
+    await user.update({
+      password: password,
+    });
+
+    return res.json("Password changed successfully");
   } catch (error) {
-    res.status(500).send("Server internal error: " + error);
+    return res.status(500).json("Server internal error: " + error.message);
   }
 };
 
