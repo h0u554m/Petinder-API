@@ -7,7 +7,21 @@ services:
     image: express-api:latest
     container_name: express-api-container
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
-      NODE_ENV: "production"
+      NODE_ENV: 'production'
+      DATABASE_URL: 'postgresql://postgres:123456@petinder_db:5432/postgres'
     restart: unless-stopped
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_PASSWORD: "123456" # Make sure this matches the password in Sequelize
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+volumes:
+  postgres_data:
