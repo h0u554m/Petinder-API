@@ -3,7 +3,7 @@ const sequelize = require("../config/database");
 const BlogPost = require("./BlogPostModel"); // Import the User model
 
 const User = sequelize.define("user", {
-  ID: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -28,7 +28,7 @@ const User = sequelize.define("user", {
       isEmail: true, // Validate that the field is an email address
     },
   },
-  Country: {
+  country: {
     type: DataTypes.STRING,
     allowNull: true,
   },
