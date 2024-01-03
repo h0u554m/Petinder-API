@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
-var nodemailer = require("nodemailer");
-var JWT_SECRET = "heUmO87Kh1KK";
+const nodemailer = require("nodemailer");
 const UserModel = require("../models/UserModel");
-const { PASSNODEMAILER } = require("../config");
+const { PASSNODEMAILER, JWT_SECRET_RESET_PASSWORD } = require("../config");
 
 const postResetPassword = async (req, res) => {
   try {
@@ -19,7 +18,7 @@ const postResetPassword = async (req, res) => {
       if (!user) {
         res.status(404).send("User does not exists");
       } else {
-        const secret = `${JWT_SECRET} ${user.password}`;
+        const secret = `${JWT_SECRET_RESET_PASSWORD} ${user.password}`;
         const token = jwt.sign({ email: user.email, id: user.id }, secret, {
           expiresIn: "15m",
         });
@@ -73,7 +72,7 @@ const getResetPassword = async (req, res) => {
     if (!user) {
       res.status(404).send("User does not exists");
     } else {
-      const secret = `${JWT_SECRET} ${user.password}`;
+      const secret = `${JWT_SECRET_RESET_PASSWORD} ${user.password}`;
       const verify = jwt.verify(token, secret);
       res.render("index", { email: verify.email, id: id, token: token });
     }
@@ -104,7 +103,7 @@ const postResetPasswordEmail = async (req, res) => {
       return res.status(404).json("User does not exist");
     }
 
-    const decodedToken = jwt.verify(token, JWT_SECRET);
+    const decodedToken = jwt.verify(token, JWT_SECRET_RESET_PASSWORD);
 
     // Check token validity
     if (decodedToken.userId !== userId) {
