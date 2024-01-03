@@ -10,7 +10,8 @@ services:
       - '3000:3000'
     environment:
       NODE_ENV: 'production'
-      DATABASE_URL: 'postgresql://postgres:123456@petinder_db:5432/postgres'
+      # postgresql://username:password@host:port/database
+      DATABASE_URL: 'postgresql://postgres:123456@db:5432/petinder_db'
     restart: unless-stopped
     depends_on:
       - db
@@ -23,6 +24,7 @@ services:
       POSTGRES_PASSWORD: "123456" # Make sure this matches the password in Sequelize
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - ./db-scripts:/docker-entrypoint-initdb.d/
     ports:
       - 5432:5432
 volumes:

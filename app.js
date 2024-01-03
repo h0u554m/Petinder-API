@@ -20,9 +20,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // Swagger Configuration
 const options = {
     definition: {
-        openapi: "3.0.0",
+        openapi: "3.1.0",
         info: {
-            title: "Petinder API",
+            title: "Petinder - API",
             version: "1.0.0",
             description: "Petinder Online API",
         },
@@ -48,7 +48,7 @@ app.use("/", indexRoute);
 app.get("/", (req, res) => {
     res.json({
         Api: {
-            message: "Petinder API Online",
+            message: "Petinder  - API Online",
         },
     });
 });

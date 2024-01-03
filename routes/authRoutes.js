@@ -9,7 +9,7 @@ const router = express.Router();
  *     User:
  *       type: object
  *       required:
- *         - userId
+ *         - id
  *         - title
  *         - body
  *       properties:
@@ -24,7 +24,7 @@ const router = express.Router();
  *           description: hashed password
  *         email:
  *           type: string
- *           description: user email 
+ *           description: user email
  *         country:
  *           type: string
  *           description: Country where user lives
@@ -77,35 +77,129 @@ const router = express.Router();
  * @swagger
  *  /auth/login:
  *   post:
- *     summary: Returns logged in user
+ *     summary: Logs in a user
  *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The username of the user.
+ *               password:
+ *                 type: string
+ *                 description: The password of the user.
  *     responses:
  *       200:
- *         description: Login a user
+ *         description: Successful login
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                   description: The access token for the user.
+ *                 refreshToken:
+ *                   type: string
+ *                   description: The refresh token for the user.
+ *       401:
+ *         description: Invalid username or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating invalid credentials.
  */
 router.post("/login", authController.login);
+
+// registerRoute
 
 /**
  * @swagger
  *  /auth/register:
  *   post:
- *     summary: Returns registered user
+ *     summary: Registers a new user
  *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The username of the new user.
+ *               password:
+ *                 type: string
+ *                 description: The password of the new user.
+ *               email:
+ *                 type: string
+ *                 description: The email address of the new user.
+ *               Country:
+ *                 type: string
+ *                 description: The country where the new user lives.
+ *               latest_tracked_location:
+ *                 type: object
+ *                 properties:
+ *                   latitude:
+ *                     type: number
+ *                     format: double
+ *                     description: The latitude of the latest tracked location.
+ *                   longitude:
+ *                     type: number
+ *                     format: double
+ *                     description: The longitude of the latest tracked location.
+ *                 description: The latest tracked location of the new user.
+ *               logbook:
+ *                 type: string
+ *                 description: Sample log entry for the new user.
+ *               name:
+ *                 type: string
+ *                 description: The name of the new user.
+ *               profile_picture:
+ *                 type: string
+ *                 format: uri
+ *                 description: URL of the profile picture for the new user.
+ *               pets:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of pets owned by the new user.
+ *               address:
+ *                 type: string
+ *                 description: The address of the new user.
  *     responses:
  *       200:
- *         description: registered user
+ *         description: Successful registration
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                   description: The access token for the new user.
+ *                 refreshToken:
+ *                   type: string
+ *                   description: The refresh token for the new user.
+ *       400:
+ *         description: Username or email already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating that the username or email already exists.
  */
 router.post("/register", authController.register);
 
