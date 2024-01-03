@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const UserModel = require("../models/UserModel");
 const { PASSNODEMAILER, JWT_SECRET_RESET_PASSWORD } = require("../config");
@@ -18,11 +19,11 @@ const postResetPassword = async (req, res) => {
       if (!user) {
         res.status(404).send("User does not exists");
       } else {
-        const secret = `${JWT_SECRET_RESET_PASSWORD} ${user.password}`;
-        const token = jwt.sign({ email: user.email, id: user.id }, secret, {
+        const secret = `${JWT_SECRET_RESET_PASSWORD}`;
+        const token = jwt.sign({ email: user.email, id: user.ID }, secret, {
           expiresIn: "15m",
         });
-        const link = `http://localhost:3000/api/reset-password/${user.id}/${token}`;
+        const link = `http://localhost:3000/reset-password/${user.ID}/${token}`;
 
         var transporter = nodemailer.createTransport({
           service: "gmail",
@@ -63,18 +64,22 @@ const postResetPassword = async (req, res) => {
 const getResetPassword = async (req, res) => {
   try {
     const { id, token } = req.params;
-    var number = Number(id);
-    //Verified that user exist
+    const number = Number(id);
+
+    if (isNaN(number)) {
+      return res.status(400).send("Invalid user ID");
+    }
+
     const user = await UserModel.findOne({
-      where: { id: number },
+      where: { ID: number },
     });
 
     if (!user) {
-      res.status(404).send("User does not exists");
+      return res.status(404).send("User does not exist");
     } else {
-      const secret = `${JWT_SECRET_RESET_PASSWORD} ${user.password}`;
+      const secret = `${JWT_SECRET_RESET_PASSWORD}`;
       const verify = jwt.verify(token, secret);
-      res.render("index", { email: verify.email, id: id, token: token });
+      res.render("index", { email: verify.email, id: number, token: token });
     }
   } catch (error) {
     res.status(500).send("Server internal error: " + error);
@@ -106,13 +111,15 @@ const postResetPasswordEmail = async (req, res) => {
     const decodedToken = jwt.verify(token, JWT_SECRET_RESET_PASSWORD);
 
     // Check token validity
-    if (decodedToken.userId !== userId) {
+    if (decodedToken.id !== userId) {
       return res.status(401).json("Unauthorized token");
     }
 
-    // Update password (consider hashing/encrypting before saving)
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update password
     await user.update({
-      password: password,
+      password: hashedPassword,
     });
 
     return res.json("Password changed successfully");

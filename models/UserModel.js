@@ -48,12 +48,14 @@ const User = sequelize.define("user", {
   pets: {
     type: DataTypes.STRING,
     allowNull: true,
+    /*
     get() {
       return this.getDataValue("pets").split(";");
     },
     set(val) {
       this.setDataValue("pets", val.join(";"));
     },
+    */
   },
   address: { type: DataTypes.STRING, allowNull: true },
 });

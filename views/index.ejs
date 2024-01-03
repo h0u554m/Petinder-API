@@ -86,7 +86,7 @@
 
           try {
             const response = await fetch(
-              `/api/reset-password/${number}/${tokenValue}`,
+              `http://localhost:3000/reset-password/${number}/${tokenValue}`,
               {
                 method: "POST",
                 headers: {
