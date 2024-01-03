@@ -4,10 +4,12 @@ const morgan = require("morgan");
 const path = require("path");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
+const cors = require("cors");
 
 // Create Express App
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(cors());
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
