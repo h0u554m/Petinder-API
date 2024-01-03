@@ -7,7 +7,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const cors = require("cors");
 const resetPasswordRoute = require("./routes/resetPasswordRoute.js");
 const resetEmailRoute = require("./routes/reseteEmailRoute.js");
-const userRouter = require("./routes/userRoutes.js");
+const authRouter = require("./routes/authRoutes.js");
 
 // Create Express App
 const app = express();
@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 app.set("view engine", "ejs");
 app.use("/", resetPasswordRoute);
 app.use("/", resetEmailRoute);
-app.use("/", userRouter);
+app.use("/", authRouter);
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));

@@ -113,8 +113,20 @@ const refreshToken = (req, res) => {
   res.json({ token: accessToken });
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await UserModel.findAll();
+    console.log("Users: ", users);
+    res.status(202).send(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error: " + error);
+  }
+};
+
 module.exports = {
   login,
   register,
   refreshToken,
+  getUsers,
 };
