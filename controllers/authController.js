@@ -119,7 +119,61 @@ const getUsers = async (req, res) => {
     console.log("Users: ", users);
     res.status(202).send(users);
   } catch (error) {
-    console.log(error);
+    res.status(500).send("Error: " + error);
+  }
+};
+
+const updateUserData = async (req, res) => {
+  try {
+    const { id, username, Country, name, address } = req.body;
+
+    if (!id || !username || !Country || !name || !address) {
+      res.status(404).send("Mandatory data missing;");
+    } else {
+      const user = await UserModel.findOne({
+        where: { ID: id },
+      });
+
+      if (!user) {
+        return res.status(404).send("User does not exist");
+      } else {
+        await user.update({
+          username: username,
+          Country: Country,
+          name: name,
+          address: address,
+        });
+
+        return res.json("User update successfully");
+      }
+    }
+  } catch (error) {
+    res.status(500).send("Error: " + error);
+  }
+};
+
+const updateUserProfilePicture = async (req, res) => {
+  try {
+    const { id, img } = req.body;
+
+    if (!id || !img) {
+      res.status(404).send("Mandatory data missing;");
+    } else {
+      const user = await UserModel.findOne({
+        where: { ID: id },
+      });
+
+      if (!user) {
+        return res.status(404).send("User does not exist");
+      } else {
+        await user.update({
+          profile_picture: img,
+        });
+
+        return res.json("User profile picture update successfully");
+      }
+    }
+  } catch (error) {
     res.status(500).send("Error: " + error);
   }
 };
@@ -129,4 +183,8 @@ module.exports = {
   register,
   refreshToken,
   getUsers,
+  updateUserData,
+  updateUserProfilePicture,
 };
+
+

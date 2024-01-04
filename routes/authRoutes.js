@@ -207,4 +207,8 @@ router.post("/refresh-token", authController.refreshToken);
 
 router.get("/users", authController.getUsers);
 
+router.post("/update-user", authController.updateUserData);
+
+router.post("/profile-picture", authController.updateUserProfilePicture);
+
 module.exports = router;
