@@ -205,7 +205,7 @@ router.post("/register", authController.register);
 
 router.post("/refresh-token", authController.refreshToken);
 
-router.get("/users", authController.getUsers);
+router.get("/user/:userId/:token", authController.getUser);
 
 router.post("/update-user", authController.updateUserData);
 
