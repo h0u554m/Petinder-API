@@ -5,6 +5,9 @@ const path = require("path");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const cors = require("cors");
+const resetPasswordRoute = require("./routes/resetPasswordRoute.js");
+const resetEmailRoute = require("./routes/reseteEmailRoute.js");
+const authRouter = require("./routes/authRoutes.js");
 
 // Create Express App
 const app = express();
@@ -16,27 +19,36 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
+
+// route Felipe Blaksley Reset Password
+app.set("view engine", "ejs");
+app.use("/", resetPasswordRoute);
+app.use("/", resetEmailRoute);
+app.use("/", authRouter);
+
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
 
 // Swagger Configuration
 const options = {
-    definition: {
-        openapi: "3.1.0",
-        info: {
-            title: "Petinder - API",
-            version: "1.0.0",
-            description: "Petinder Online API",
-        },
-
-        servers: [
-            {
-                url: "http://localhost:3000",
-                description: "Petinder API Documentation",
-            },
-        ],
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "Petinder - API",
+      version: "1.0.0",
+      description: "Petinder Online API",
     },
-    apis: ["./Routes/*.js"],
+
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "Petinder API Documentation",
+      },
+    ],
+  },
+  apis: ["./Routes/*.js"],
 };
 
 const specs = swaggerJsDoc(options);
@@ -48,14 +60,14 @@ const indexRoute = require("./routes/index");
 app.use("/", indexRoute);
 
 app.get("/", (req, res) => {
-    res.json({
-        Api: {
-            message: "Petinder  - API Online",
-        },
-    });
+  res.json({
+    Api: {
+      message: "Petinder  - API Online",
+    },
+  });
 });
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });

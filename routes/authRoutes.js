@@ -205,4 +205,10 @@ router.post("/register", authController.register);
 
 router.post("/refresh-token", authController.refreshToken);
 
+router.get("/user/:userId/:token", authController.getUser);
+
+router.post("/update-user", authController.updateUserData);
+
+router.post("/profile-picture", authController.updateUserProfilePicture);
+
 module.exports = router;

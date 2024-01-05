@@ -113,8 +113,87 @@ const refreshToken = (req, res) => {
   res.json({ token: accessToken });
 };
 
+const updateUserData = async (req, res) => {
+  try {
+    const { id, username, Country, name, address } = req.body;
+
+    if (!id || !username || !Country || !name || !address) {
+      res.status(404).send("Mandatory data missing;");
+    } else {
+      const user = await UserModel.findOne({
+        where: { ID: id },
+      });
+
+      if (!user) {
+        return res.status(404).send("User does not exist");
+      } else {
+        await user.update({
+          username: username,
+          Country: Country,
+          name: name,
+          address: address,
+        });
+
+        return res.json("User update successfully");
+      }
+    }
+  } catch (error) {
+    res.status(500).send("Error: " + error);
+  }
+};
+
+const updateUserProfilePicture = async (req, res) => {
+  try {
+    const { id, img } = req.body;
+
+    if (!id || !img) {
+      res.status(404).send("Mandatory data missing;");
+    } else {
+      const user = await UserModel.findOne({
+        where: { ID: id },
+      });
+
+      if (!user) {
+        return res.status(404).send("User does not exist");
+      } else {
+        await user.update({
+          profile_picture: img,
+        });
+
+        return res.json("User profile picture update successfully");
+      }
+    }
+  } catch (error) {
+    res.status(500).send("Error: " + error);
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const token = req.params.token;
+
+    if (!token) {
+      res.status(401).send("No authorized");
+    } else {
+      const user = await UserModel.findOne({ where: { ID: userId } });
+
+      if (user) {
+        res.status(200).send(user);
+      } else {
+        res.status(404).send("User not found");
+      }
+    }
+  } catch (error) {
+    res.status(500).send("Error: " + error);
+  }
+};
+
 module.exports = {
   login,
   register,
   refreshToken,
+  getUser,
+  updateUserData,
+  updateUserProfilePicture,
 };

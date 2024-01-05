@@ -44,16 +44,21 @@ const User = sequelize.define("user", {
   },
   logbook: { type: DataTypes.STRING, allowNull: true },
   name: { type: DataTypes.STRING, allowNull: true },
-  profile_picture: { type: DataTypes.STRING, allowNull: true },
+  profile_picture: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   pets: {
     type: DataTypes.STRING,
     allowNull: true,
+    /*
     get() {
       return this.getDataValue("pets").split(";");
     },
     set(val) {
       this.setDataValue("pets", val.join(";"));
     },
+    */
   },
   address: { type: DataTypes.STRING, allowNull: true },
 });
