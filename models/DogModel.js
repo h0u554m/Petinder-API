@@ -23,10 +23,10 @@ const Dog = sequelize.define("dogs", {
 
 Dog.sync({ force: true }) // Use { force: true } to drop the table if it already exists
   .then(() => {
-    console.log("User table created successfully");
+    console.log("Dog table created successfully");
   })
   .catch((error) => {
-    console.error("Error creating user table:", error);
+    console.error("Error creating dog table:", error);
   });
 
 module.exports = Dog;

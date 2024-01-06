@@ -23,10 +23,10 @@ const Cat = sequelize.define("cats", {
 
 Cat.sync({ force: true }) // Use { force: true } to drop the table if it already exists
   .then(() => {
-    console.log("User table created successfully");
+    console.log("Cat table created successfully");
   })
   .catch((error) => {
-    console.error("Error creating user table:", error);
+    console.error("Error creating Cat table:", error);
   });
 
 module.exports = Cat;
